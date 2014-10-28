@@ -43,8 +43,22 @@
                 function(){
                     $(function()
                     { //DOM Ready
+
+                        // Initialization                        
 						freeboard.setAssetRoot("/freeboard-ui/");
                         freeboard.initialize(true);
+
+                        // Load default dashboard configuration
+                        $.ajax("/dashboard", {
+                            'async': true,
+                            'method': 'get',
+                            'success': function(data, status, xhr) {
+                                freeboard.loadDashboard(data);
+                            },
+                            'error': function(xhr, status, error) {
+                                freeboard.showDialog(xhr.responseJSON.error, error, "OK");
+                            }
+                        });
                     });
                 });
     </script>
@@ -66,6 +80,7 @@
                     <ul class="board-toolbar vertical">
                         <li data-bind="click: loadDashboardFromLocalFile"><i id="full-screen-icon" class="icon-folder-open icon-white"></i><label id="full-screen">Load Freeboard</label></li>
                         <li data-bind="click: saveDashboard"><i class="icon-download-alt icon-white"></i><label>Save Freeboard</label></li>
+                        <li data-bind="click: setDefault"><i class="icon-bookmark icon-white"></i><label>Set Default</label></li>
                         <li id="add-pane" data-bind="click: createPane"><i class="icon-plus icon-white"></i><label>Add Pane</label></li>
                     </ul>
                 </div>

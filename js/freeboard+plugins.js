@@ -546,6 +546,25 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 		a.click();
 	}
 
+	this.setDefault = function()
+	{
+		freeboard.showDialog("Would you like to replace default dashboard with the current one?", "Set Default", "Replace", "Cancel", function(){
+			var data = JSON.stringify(self.serialize());
+			$.ajax('/dashboard', {
+				'async': true,
+				'method': 'post',
+				'contentType': 'application/json',
+				'data': data,
+				'success': function(data, status, xhr) {
+					freeboard.showDialog("Current dashboard has been saved on the server and will be loaded by default.", status, "OK");
+				},
+				'error': function(xhr, status, error) {
+					freeboard.showDialog(error, "Failed to save dashboard as default", "OK");
+				}
+			});
+		});
+	}
+
 	this.addDatasource = function(datasource)
 	{
 		self.datasources.push(datasource);
